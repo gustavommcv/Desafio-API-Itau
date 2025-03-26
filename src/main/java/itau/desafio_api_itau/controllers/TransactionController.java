@@ -1,5 +1,8 @@
 package itau.desafio_api_itau.controllers;
 
+import itau.desafio_api_itau.DTOS.TransactionRequestDTO;
+import itau.desafio_api_itau.contracts.service_contracts.ITransactionService;
+import itau.desafio_api_itau.util.validators.ValidationResult;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +16,12 @@ import java.util.Map;
         consumes = MediaType.APPLICATION_JSON_VALUE // JSON Requests
 )
 public class TransactionController {
+    private final ITransactionService service;
+
+    public TransactionController(ITransactionService service) {
+        this.service = service;
+    }
+
     @GetMapping("/")
     public ResponseEntity<Map<String, Object>> index() {
         // Building the response JSON for all the endpoints
@@ -54,23 +63,9 @@ public class TransactionController {
     }
 
     @PostMapping("/transacao")
-    public ResponseEntity<Object> postTransacao() {
-//        Request
-//        Tenham os campos valor e dataHora preenchidos
-//        A transação NÃO DEVE acontecer no futuro
-//        A transação DEVE ter acontecido a qualquer momento no passado
-//        A transação NÃO DEVE ter valor negativo
-//        A transação DEVE ter valor igual ou maior que 0 (zero)
-
-//        Response
-//        201 Created sem nenhum corpo
-//        A transação foi aceita (ou seja foi validada, está válida e foi registrada)
-//        422 Unprocessable Entity sem nenhum corpo
-//        A transação não foi aceita por qualquer motivo (1 ou mais dos critérios de aceite não foram atendidos - por exemplo: uma transação com valor menor que 0)
-//        400 Bad Request sem nenhum corpo
-//        A API não compreendeu a requisição do cliente (por exemplo: um JSON inválido)
-
-        return ResponseEntity.ok("post Transacao");
+    public ResponseEntity<Void> postTransacao(@RequestBody TransactionRequestDTO requestDTO) {
+        ValidationResult result = service.addTransaction(requestDTO);
+        return ResponseEntity.status(result.getStatus()).build();
     }
 
     @DeleteMapping("/transacao")
