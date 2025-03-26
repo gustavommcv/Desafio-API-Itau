@@ -1,6 +1,7 @@
 package itau.desafio_api_itau.contracts.service_contracts;
 
 import itau.desafio_api_itau.DTOS.TransactionRequestDTO;
+import itau.desafio_api_itau.models.Statistic;
 import itau.desafio_api_itau.util.validators.ValidationResult;
 
 public interface ITransactionService {
@@ -8,7 +9,7 @@ public interface ITransactionService {
     ValidationResult addTransaction(TransactionRequestDTO transactionRequest);
 
     // Get statistics on transactions that have taken place in the last 60 seconds
-    void getStatistics();
+    Statistic getStatistics();
 
     // Delete all transactions
     void deleteAllTransactions();

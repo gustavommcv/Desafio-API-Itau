@@ -2,6 +2,7 @@ package itau.desafio_api_itau.controllers;
 
 import itau.desafio_api_itau.DTOS.TransactionRequestDTO;
 import itau.desafio_api_itau.contracts.service_contracts.ITransactionService;
+import itau.desafio_api_itau.models.Statistic;
 import itau.desafio_api_itau.util.validators.ValidationResult;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -69,12 +70,12 @@ public class TransactionController {
     }
 
     @DeleteMapping("/transacao")
-    public ResponseEntity<Object> deleteTransacao() {
+    public ResponseEntity<Void> deleteTransacao() {
 //        Response
 //        200 OK sem nenhum corpo
 //        Todas as informações foram apagadas com sucesso
-
-        return ResponseEntity.ok("delete Transacao");
+        service.deleteAllTransactions();
+        return ResponseEntity.status(200).build();
     }
 
     @GetMapping("/estatistica")
@@ -84,6 +85,6 @@ public class TransactionController {
 //        Um JSON com os campos count, sum, avg, min e max todos preenchidos com seus respectivos valores
 //        Atenção! Quando não houverem transações nos últimos 60 segundos considere todos os valores como 0 (zero
 
-        return ResponseEntity.ok("get Estatistica");
+        return ResponseEntity.ok(service.getStatistics());
     }
 }
