@@ -20,11 +20,11 @@ public class TransactionRepository implements ITransactionRepository {
 
     @Override
     public void addTransaction(TransactionRequestDTO transactionRequest) {
-
+        _dbContext.save(transactionRequest);
     }
 
     @Override
-    public boolean deleteAllTransactions() {
-        return false;
+    public int deleteAllTransactions() {
+        return _dbContext.dropAll();
     }
 }

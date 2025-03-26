@@ -4,9 +4,9 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 public class Transaction {
-    public UUID id;
-    public Double value;
-    public OffsetDateTime date;
+    private UUID id;
+    private Double value;
+    private OffsetDateTime date;
 
     public Transaction(Double value, OffsetDateTime date) {
         this.value = value;

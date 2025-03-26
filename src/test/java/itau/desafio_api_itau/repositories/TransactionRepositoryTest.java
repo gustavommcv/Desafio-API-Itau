@@ -3,6 +3,7 @@ package itau.desafio_api_itau.repositories;
 import itau.desafio_api_itau.DTOS.TransactionRequestDTO;
 import itau.desafio_api_itau.contracts.repository_contracts.ITransactionRepository;
 import itau.desafio_api_itau.models.Transaction;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,21 @@ public class TransactionRepositoryTest {
 
     @Autowired
     private ITransactionRepository transactionRepository;
+
+    @AfterEach
+    void tearDown() {
+        transactionRepository.deleteAllTransactions();
+    }
+
+    @Test
+    @DisplayName("should return empty list when there are no transactions")
+    void getAllTransactions_WhenEmpty_ShouldReturnEmptyList() {
+        // Act
+        List<Transaction> transactions = transactionRepository.getAllTransactions();
+
+        // Assert
+        assertTrue(transactions.isEmpty(), "A lista de transações deve estar vazia");
+    }
 
     @Test
     @DisplayName("should persist a transaction when adding it")
@@ -46,7 +62,7 @@ public class TransactionRepositoryTest {
     }
 
     @Test
-    @DisplayName("should remove all transactions when deleting")
+    @DisplayName("should remove all transactions and return correct count when deleting")
     void deleteAllTransactions_ExistingTransactions_ShouldClearRepository() {
         // Arrange
         transactionRepository.addTransaction(new TransactionRequestDTO(50.0, OffsetDateTime.now()));
@@ -54,14 +70,20 @@ public class TransactionRepositoryTest {
         int initialSize = transactionRepository.getAllTransactions().size();
 
         // Act
-        boolean result = transactionRepository.deleteAllTransactions();
+        int deletedCount = transactionRepository.deleteAllTransactions();
 
         // Assert
-        assertTrue(result, "O retorno deve indicar sucesso na operação");
-        assertEquals(
-                0,
-                transactionRepository.getAllTransactions().size(),
-                "O repositório deveria estar vazio após a deleção"
-        );
+        assertEquals(initialSize, deletedCount, "Deveria retornar o número correto de transações deletadas");
+        assertEquals(0, transactionRepository.getAllTransactions().size(), "Repositório deve estar vazio");
+    }
+
+    @Test
+    @DisplayName("should return 0 when no transactions to delete")
+    void deleteAllTransactions_WhenEmpty_ShouldReturnZero() {
+        // Act
+        int deletedCount = transactionRepository.deleteAllTransactions();
+
+        // Assert
+        assertEquals(0, deletedCount, "Deveria retornar 0 quando não há transações");
     }
 }

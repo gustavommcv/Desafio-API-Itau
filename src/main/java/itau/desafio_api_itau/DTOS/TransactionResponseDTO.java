@@ -3,8 +3,8 @@ package itau.desafio_api_itau.DTOS;
 import java.time.OffsetDateTime;
 
 public class TransactionResponseDTO {
-    public Double value;
-    public OffsetDateTime date;
+    private Double value;
+    private OffsetDateTime date;
 
     public TransactionResponseDTO(Double value, OffsetDateTime date) {
         this.value = value;

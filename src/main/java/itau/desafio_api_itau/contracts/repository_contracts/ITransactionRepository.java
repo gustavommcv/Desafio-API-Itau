@@ -13,5 +13,5 @@ public interface ITransactionRepository {
     void addTransaction(TransactionRequestDTO transactionRequest);
 
     // Delete all transactions
-    boolean deleteAllTransactions();
+    int deleteAllTransactions();
 }
